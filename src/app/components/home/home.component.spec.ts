@@ -7,7 +7,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { GraphQLModule } from '../../graphql.module';
 import { By } from '@angular/platform-browser';
 import { Apollo } from 'apollo-angular';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,6 +15,7 @@ import { ApolloQueryResult } from '@apollo/client';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
 
+import { GraphQLModule } from '../../graphql.module';
 import { HomeComponent } from './home.component';
 import { Movie } from '../../models/movie';
 import { getMockMovieWithSimilar, getMockMovies } from '../../test-utils/mock-movies';

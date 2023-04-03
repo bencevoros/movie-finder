@@ -21,7 +21,7 @@ export class MoviesService {
       variables: { id: movieId },
     }).pipe(
       take(1),
-      map(({ data, error }) => data.movie),
+      map(({ data }) => data.movie),
     )
   }
 
@@ -31,7 +31,7 @@ export class MoviesService {
       variables: { id: movieId, page: 1, limit: 5 },
     }).pipe(
       take(1),
-      map(({ data, error }) => data.movie.similar),
+      map(({ data }) => data.movie.similar),
     )
   }
 
@@ -69,7 +69,7 @@ export class MoviesService {
       variables: { query: keyword },
     }).pipe(
       take(1),
-      map(({ data, error }) => data.searchMovies)
+      map(({ data }) => data.searchMovies)
     );
   }
 

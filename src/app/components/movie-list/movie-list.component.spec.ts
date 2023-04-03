@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatListModule } from '@angular/material/list';
+import { By } from '@angular/platform-browser';
 
 import { MovieListComponent } from './movie-list.component';
-import { MatListModule } from '@angular/material/list';
 import { getMockMovies } from '../../test-utils/mock-movies';
-import { By } from '@angular/platform-browser';
-import { EventEmitter } from '@angular/core';
 
 describe('MovieListComponent', () => {
   let component: MovieListComponent;

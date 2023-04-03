@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,9 +8,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog';
+
 import { HomeComponent } from './components/home/home.component';
 import { GraphQLModule } from './graphql.module';
-import { MatDialogModule } from '@angular/material/dialog';
+import { AppComponent } from './app.component';
 import { SearchCardComponent } from './components/search-card/search-card.component';
 
 describe('AppComponent', () => {

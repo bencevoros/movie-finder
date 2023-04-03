@@ -5,12 +5,12 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserModule, By } from '@angular/platform-browser';
-
-import { SearchCardComponent } from './search-card.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SearchType } from '../../enums/search-type';
 import { EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
+
+import { SearchCardComponent } from './search-card.component';
+import { SearchType } from '../../enums/search-type';
 
 describe('SearchCardComponent', () => {
   let component: SearchCardComponent;
