@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Observable, Subject, throwError } from 'rxjs';
-import { MoviesService } from 'src/app/services/movie.service';
+import { MoviesService } from '../../services/movie.service';
 import { Movie } from '../../models/movie';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

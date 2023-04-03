@@ -4,15 +4,15 @@
       <mat-card-title>Search for movie</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <form (submit)="onHomeSubmit($event)" class="movie-search-form">
+      <form (submit)="onHomeSubmit($event)" id="movie-search-form" class="movie-search-form">
         <mat-form-field>
           <mat-label>Movie name</mat-label>
-          <input (keydown.enter)="onHomeSubmit($event)" matInput type="text" [formControl]="keyword">
+          <input id="movie-name-input" (keydown.enter)="onHomeSubmit($event)" matInput type="text" [formControl]="keyword">
           <button *ngIf="keyword.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetKeyword()">
             <mat-icon>close</mat-icon>
           </button>
         </mat-form-field>
-        <button mat-raised-button extended color="primary" [disabled]="moviesLoading$ | async">
+        <button id="movie-name-search-button" mat-raised-button extended color="primary" [disabled]="moviesLoading$ | async">
           <mat-icon class="loading-icon" *ngIf="moviesLoading$ | async">sync</mat-icon>
           Search
         </button>
@@ -20,9 +20,9 @@
     </mat-card-content>
   </mat-card>
 
-  <ng-container *ngIf="(movies$ | async) as movies">
+  <div id="movies-container" *ngIf="(movies$ | async) as movies">
     <div *ngFor="let movie of movies">
       {{ movie.name }}
     </div>
-  </ng-container>
+  </div>
 </div>
