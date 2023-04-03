@@ -1,0 +1,28 @@
+<div class="home-container">
+  <mat-card class="movie-card">
+    <mat-card-header>
+      <mat-card-title>Search for movie</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form (submit)="onHomeSubmit($event)" class="movie-search-form">
+        <mat-form-field>
+          <mat-label>Movie name</mat-label>
+          <input (keydown.enter)="onHomeSubmit($event)" matInput type="text" [formControl]="keyword">
+          <button *ngIf="keyword.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetKeyword()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+        <button mat-raised-button extended color="primary" [disabled]="moviesLoading$ | async">
+          <mat-icon class="loading-icon" *ngIf="moviesLoading$ | async">sync</mat-icon>
+          Search
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <ng-container *ngIf="(movies$ | async) as movies">
+    <div *ngFor="let movie of movies">
+      {{ movie.name }}
+    </div>
+  </ng-container>
+</div>
