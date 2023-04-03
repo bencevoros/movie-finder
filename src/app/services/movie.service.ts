@@ -3,7 +3,7 @@ import { Apollo } from 'apollo-angular';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { GET_MOVIE, SEARCH_MOVIES } from '../graphql.queries';
+import { GET_MOVIE, GET_SIMILAR_MOVIES, SEARCH_MOVIES } from '../graphql.queries';
 import { Movie } from '../models/movie';
 import { WikiResponse } from '../models/wiki-response';
 import { WikiDetails } from '../models/wiki-details';
@@ -22,6 +22,16 @@ export class MoviesService {
     }).pipe(
       take(1),
       map(({ data, error }) => data.movie),
+    )
+  }
+
+  getSimilarMovies(movieId: number): Observable<Movie[]> {
+    return this.apollo.query({
+      query: GET_SIMILAR_MOVIES,
+      variables: { id: movieId, page: 1, limit: 5 },
+    }).pipe(
+      take(1),
+      map(({ data, error }) => data.movie.similar),
     )
   }
 

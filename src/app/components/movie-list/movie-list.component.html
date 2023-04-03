@@ -1,4 +1,9 @@
-<h2>Found movies</h2>
+<h2 *ngIf="searchType === SearchType.REGULAR">Found movies</h2>
+<h2 *ngIf="searchType === SearchType.SIMILAR">Found related movies</h2>
+
+<div *ngIf="movies.length === 0">
+  No movie for the specified title.
+</div>
 
 <mat-list role="list">
   <mat-list-item role="listitem" *ngFor="let movie of movies" (click)="openDetails(movie.id)">

@@ -12,6 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './components/home/home.component';
 import { GraphQLModule } from './graphql.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { SearchCardComponent } from './components/search-card/search-card.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -19,6 +20,7 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent,
         HomeComponent,
+        SearchCardComponent,
       ],
       imports: [
         BrowserModule,

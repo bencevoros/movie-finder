@@ -40,9 +40,5 @@ export interface Movie {
   //   page: PageRange = false
   //   limit?: number
   // ): [Movie!]!
-  // similar(
-  //   language: Translations
-  //   page: PageRange = false
-  //   limit?: number
-  // ): [Movie!]!
+  similar?: Movie[];
 }

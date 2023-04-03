@@ -1,28 +1,15 @@
 <div class="home-container">
-  <mat-card class="movie-card">
-    <mat-card-header>
-      <mat-card-title>Search for movie</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form (submit)="onHomeSubmit($event)" id="movie-search-form" class="movie-search-form">
-        <mat-form-field>
-          <mat-label>Movie name</mat-label>
-          <input id="movie-name-input" (keydown.enter)="onHomeSubmit($event)" matInput type="text" [formControl]="keyword">
-          <button *ngIf="keyword.value" matSuffix mat-icon-button aria-label="Clear" (click)="resetKeyword()">
-            <mat-icon>close</mat-icon>
-          </button>
-        </mat-form-field>
-        <button id="movie-name-search-button" mat-raised-button extended color="primary" [disabled]="moviesLoading$ | async">
-          <mat-icon class="loading-icon" *ngIf="moviesLoading$ | async">sync</mat-icon>
-          Search
-        </button>
-      </form>
-    </mat-card-content>
-  </mat-card>
+  <app-search-card
+    [searchType]="searchType"
+    [moviesLoading]="moviesLoading$ | async"
+    [relatedKeyword]="relatedKeyword"
+    (searchMoviesSubmit)="searchMovies($event)"
+    (searchTypeChanged)="searchTypeChanged($event)"
+  ></app-search-card>
 
   <hr class="home-divider">
 
   <div id="movies-container" class="movies-container" *ngIf="(movies$ | async) as movies">
-    <app-movie-list [movies]="movies" (openMovieDetails)="openDetailsPopup($event)"></app-movie-list>
+    <app-movie-list [movies]="movies" (openMovieDetails)="openDetailsPopup($event)" [searchType]="searchType"></app-movie-list>
   </div>
 </div>

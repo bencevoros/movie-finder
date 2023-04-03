@@ -1,0 +1,58 @@
+<mat-card class="movie-card">
+  <mat-card-header>
+    <mat-card-title>Search for movie</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form
+      (submit)="searchSubmit($event)"
+      [formGroup]="form"
+      id="movie-search-form"
+      class="movie-search-form"
+    >
+      <mat-form-field>
+        <mat-label>Movie name</mat-label>
+        <input
+          id="movie-name-input"
+          (keydown.enter)="searchSubmit($event)"
+          matInput
+          type="text"
+          formControlName="keyword"
+        >
+        <button
+          *ngIf="form.controls.keyword.value"
+          id="movie-name-input-clear"
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="resetKeyword()"
+          [disabled]="form.disabled"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <button
+        id="movie-name-search-button"
+        type="submit"
+        mat-raised-button
+        extended
+        color="primary"
+        [disabled]="moviesLoading || form.disabled"
+      >
+        <mat-icon class="loading-icon" *ngIf="moviesLoading">sync</mat-icon>
+        Search
+      </button>
+    </form>
+  </mat-card-content>
+  <mat-card-actions class="search-card-actions">
+    <button
+      id="switch-regular-search-button"
+      *ngIf="searchType === SearchType.SIMILAR"
+      type="button"
+      mat-raised-button
+      color="secondary"
+      (click)="resetKeyword()"
+    >
+      Clear related search
+    </button>
+  </mat-card-actions>
+</mat-card>

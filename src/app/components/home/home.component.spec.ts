@@ -18,9 +18,10 @@ import { MatListModule } from '@angular/material/list';
 
 import { HomeComponent } from './home.component';
 import { Movie } from '../../models/movie';
-import { getMockMovies } from '../../test-utils/mock-movies';
+import { getMockMovieWithSimilar, getMockMovies } from '../../test-utils/mock-movies';
 import { MovieDetailDialogComponent } from '../movie-detail-dialog/movie-detail-dialog.component';
 import { MovieListComponent } from '../movie-list/movie-list.component';
+import { SearchCardComponent } from '../search-card/search-card.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -28,7 +29,11 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HomeComponent, MovieListComponent ],
+      declarations: [
+        HomeComponent,
+        MovieListComponent,
+        SearchCardComponent,
+      ],
       imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -111,30 +116,63 @@ describe('HomeComponent', () => {
     });
   });
 
-  describe('when clicks on input\'s clear icon', () => {
-    it('clears keyword formcontrol', () => {
-      const input = fixture.debugElement.query(By.css('#movie-name-input')).nativeElement;
-      input.value = 'A movie name';
-      input.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
-
-      const clearButton = fixture.debugElement.query(By.css('button[aria-label="Clear"]')).nativeElement;
-      clearButton.click();
-
-      expect(component.keyword.value).toBe(null);
-    });
-  });
-
   describe('when call openDetailsPopup', () => {
     it('opens the detail popup', () => {
+      const selectMovieForSimilarsMock = of({ movieId: 1, movieName: 'A movie name' });
       const spiedDialogOpen = jest.spyOn(TestBed.inject(MatDialog), 'open')
-        .mockImplementation(() => ({} as MatDialogRef<unknown, unknown>));
+        .mockImplementation(() => ({
+          componentInstance: { selectMovieForSimilars: selectMovieForSimilarsMock },
+        } as MatDialogRef<unknown, unknown>));
       component.openDetailsPopup({ movieId: 123 });
       expect(spiedDialogOpen).toHaveBeenCalledWith(MovieDetailDialogComponent, {
         data: { movieId: 123 },
         enterAnimationDuration: '300ms',
         exitAnimationDuration: '300ms',
+        maxHeight: '80dvh',
       });
+    });
+  });
+
+  describe('when call getSimilarMovies', () => {
+    it('shows spinner', () => {
+      const mockGraphqlReturnValue = {
+        data: { movie: getMockMovieWithSimilar() }
+      } as ApolloQueryResult<{ movie: Movie }>;
+      const apolloQueryMock = jest.spyOn(TestBed.inject(Apollo), 'query');
+      apolloQueryMock.mockReturnValue(of(mockGraphqlReturnValue).pipe(delay(1000)))
+
+      component.getSimilarMovies(1);
+      fixture.detectChanges();
+      const button = fixture.debugElement.query(By.css('#movie-name-search-button')).nativeElement;
+      
+      expect(apolloQueryMock).toHaveBeenCalled();
+      expect(button.querySelector('mat-icon')).toBeTruthy();
+    });
+
+    it('renders to the UI', (done) => {
+      const mockGraphqlReturnValue = {
+        data: { movie: getMockMovieWithSimilar() }
+      } as ApolloQueryResult<{ movie: Movie }>;
+      const apolloQueryMock = jest.spyOn(TestBed.inject(Apollo), 'query');
+      apolloQueryMock.mockReturnValue(of(mockGraphqlReturnValue))
+
+      component.getSimilarMovies(1);
+      fixture.detectChanges();
+  
+      setTimeout(() => {
+        try {
+          fixture.detectChanges();
+          const moviesContainer = fixture.debugElement.query(By.css('#movies-container')).nativeElement;
+  
+          expect(apolloQueryMock).toHaveBeenCalled();
+          expect(moviesContainer).toBeTruthy();
+          expect(moviesContainer.querySelectorAll('app-movie-list').length).toBe(1);
+          done();
+        }
+        catch (err) {
+          done(err);
+        }
+      }, 1000);
     });
   });
 });

@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { MovieListComponent } from './components/movie-list/movie-list.component';
 import { MovieDetailDialogComponent } from './components/movie-detail-dialog/movie-detail-dialog.component';
+import { SearchCardComponent } from './components/search-card/search-card.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { MovieDetailDialogComponent } from './components/movie-detail-dialog/mov
     HomeComponent,
     MovieListComponent,
     MovieDetailDialogComponent,
+    SearchCardComponent,
   ],
   imports: [
     BrowserModule,

@@ -44,3 +44,27 @@ export const GET_MOVIE = gql<{ movie: Movie }, { id: number }>`
     }
   }
 `;
+
+export const GET_SIMILAR_MOVIES = gql<{ movie: { similar: Movie[] } }, { id: number; page: number; limit: number }>`
+  query getMovie($id: ID!) {
+    movie(id: $id) {
+      similar(language: English) {
+        id
+        name
+        tagline
+        overview
+        releaseDate
+        runtime
+        budget
+        revenue
+        adult
+        popularity
+        score
+        votes
+        socialMedia {
+          imdb
+        }
+      }
+    }
+  }
+`;

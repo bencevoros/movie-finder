@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject, Observable } from 'rxjs';
@@ -19,6 +19,11 @@ export class MovieDetailDialogComponent {
   isLoadingSubject: Subject<boolean> = new Subject();
   isLoading$: Observable<boolean> = this.isLoadingSubject.asObservable();
 
+  @Output()
+  selectMovieForSimilars: EventEmitter<{
+    movieId: number, movieName: string
+  }> = new EventEmitter();
+
   constructor(
     private movieService: MoviesService,
     private _snackBar: MatSnackBar,
@@ -28,7 +33,7 @@ export class MovieDetailDialogComponent {
     this.getMovie(this.data.movieId);
   }
   
-  onCloseClick(): void {
+  closeDialog(): void {
     this.dialogRef.close();
   }
 
@@ -79,5 +84,12 @@ export class MovieDetailDialogComponent {
     if (!this.wikiPageId) return;
 
     window.open(`https://en.wikipedia.org/?curid=${this.wikiPageId}`, '_blank', 'noopener,noreferrer');
+  }
+
+  checkRelatedMovies() {
+    if (!this.movie) return;
+
+    this.selectMovieForSimilars.emit({ movieId: this.movie.id, movieName: this.movie.name });
+    this.closeDialog();
   }
 }

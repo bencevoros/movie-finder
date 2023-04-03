@@ -6,7 +6,7 @@
   <ng-template #movieContainer>
     <ng-container *ngIf="movie">
       <mat-card-title class="movie-card-content-title">
-        <button mat-icon-button (click)='onCloseClick()'><mat-icon>close</mat-icon></button>
+        <button mat-icon-button (click)="closeDialog()"><mat-icon>close</mat-icon></button>
         {{ movie.name }}
       </mat-card-title>
       <mat-card-content>
@@ -17,8 +17,8 @@
             id="check-on-imdb-button"
             mat-raised-button
             color="primary"
-            (click)='goToImdbPage()'
-            [disabled]='!movie.socialMedia.imdb'
+            (click)="goToImdbPage()"
+            [disabled]="!movie.socialMedia.imdb"
             [title]="movie.socialMedia.imdb ? '' : 'IMDB page not found'"
           >
             Check on IMDB
@@ -28,15 +28,26 @@
         <div class="movie-card-content-item">
           <h3>Details from wikipedia</h3>
           <div *ngIf="wikiDetails">{{ wikiDetails.snippet }}...</div>
-          <div *ngIf="!wikiDetails">Details on WikiPedia does not found.</div>
+          <div *ngIf="!wikiDetails">Details from WikiPedia does not found.</div>
           <button
             id="check-on-wiki-button"
             mat-raised-button
             color="primary"
-            (click)='goToWikiPage()'
-            [disabled]='!wikiDetails'
+            (click)="goToWikiPage()"
+            [disabled]="!wikiDetails"
           >
             Check on WikiPedia
+          </button>
+        </div>
+        <hr>
+        <div class="movie-card-content-item">
+          <button
+            id="check-related-button"
+            mat-raised-button
+            color="primary"
+            (click)="checkRelatedMovies()"
+          >
+            Check related movies
           </button>
         </div>
       </mat-card-content>
