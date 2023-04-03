@@ -16,6 +16,31 @@ export const SEARCH_MOVIES = gql<{ searchMovies: Movie[] }, { query: string }>`
       popularity
       score
       votes
+      socialMedia {
+        imdb
+      }
+    }
+  }
+`;
+
+export const GET_MOVIE = gql<{ movie: Movie }, { id: number }>`
+  query getMovie($id: ID!) {
+    movie(id: $id) {
+      id
+      name
+      tagline
+      overview
+      releaseDate
+      runtime
+      budget
+      revenue
+      adult
+      popularity
+      score
+      votes
+      socialMedia {
+        imdb
+      }
     }
   }
 `;

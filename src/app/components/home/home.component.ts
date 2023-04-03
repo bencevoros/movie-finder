@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Observable, Subject, throwError } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { MoviesService } from '../../services/movie.service';
 import { Movie } from '../../models/movie';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { MovieDetailDialogComponent } from '../movie-detail-dialog/movie-detail-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -17,17 +19,15 @@ export class HomeComponent {
   movies$: Observable<Readonly<Movie[]>> = this.moviesSubject.asObservable();
   moviesLoadingSubject: Subject<boolean> = new Subject();
   moviesLoading$: Observable<boolean> = this.moviesLoadingSubject.asObservable();
-  moviesErrorSubject: Subject<string> = new Subject();
-  moviesError$: Observable<string> = this.moviesErrorSubject.asObservable();
 
   constructor(
     private moviesService: MoviesService,
     private _snackBar: MatSnackBar,
-  ) { }
+    private dialog: MatDialog,
+  ) {}
 
   onHomeSubmit(event: Event) {
     event.preventDefault();
-    this.moviesErrorSubject.next('');
     this._snackBar.dismiss();
     this.moviesLoadingSubject.next(true);
 
@@ -40,10 +40,17 @@ export class HomeComponent {
         error: error => {
           console.error(error);
           this._snackBar.open('Failed to load movies', 'Close', { panelClass: 'error-snackbar'});
-          this.moviesErrorSubject.next('Failed to load movies');
           this.moviesLoadingSubject.next(false);
         },
       });
+  }
+
+  openDetailsPopup(data: { movieId: number }) {
+    this.dialog.open(MovieDetailDialogComponent, {
+      data,
+      enterAnimationDuration: '300ms',
+      exitAnimationDuration: '300ms',
+    });
   }
 
   resetKeyword() {

@@ -13,10 +13,14 @@ import { Apollo } from 'apollo-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { delay, of } from 'rxjs';
 import { ApolloQueryResult } from '@apollo/client';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatListModule } from '@angular/material/list';
 
 import { HomeComponent } from './home.component';
 import { Movie } from '../../models/movie';
 import { getMockMovies } from '../../test-utils/mock-movies';
+import { MovieDetailDialogComponent } from '../movie-detail-dialog/movie-detail-dialog.component';
+import { MovieListComponent } from '../movie-list/movie-list.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -24,7 +28,7 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HomeComponent ],
+      declarations: [ HomeComponent, MovieListComponent ],
       imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -37,6 +41,8 @@ describe('HomeComponent', () => {
         MatIconModule,
         MatCardModule,
         MatSnackBarModule,
+        MatListModule,
+        MatDialogModule,
       ],
     })
     .compileComponents();
@@ -56,8 +62,8 @@ describe('HomeComponent', () => {
 
   describe('when fetch movies', () => {
     it('shows spinner', () => {
-      const mockGraphqlReturnValue = { data: getMockMovies() } as ApolloQueryResult<Movie[]>;
-      const apolloQueryMock = jest.spyOn(Apollo.prototype, 'query');
+      const mockGraphqlReturnValue = { data: { searchMovies: getMockMovies() } } as ApolloQueryResult<{ searchMovies: Movie[] }>;
+      const apolloQueryMock = jest.spyOn(TestBed.inject(Apollo), 'query');
       apolloQueryMock.mockReturnValue(of(mockGraphqlReturnValue).pipe(delay(1000)))
 
       const input = fixture.debugElement.query(By.css('#movie-name-input')).nativeElement;
@@ -74,9 +80,9 @@ describe('HomeComponent', () => {
       expect(button.querySelector('mat-icon')).toBeTruthy();
     });
 
-    it('renders to the UI', () => {
-      const mockGraphqlReturnValue = { data: getMockMovies() } as ApolloQueryResult<Movie[]>;
-      const apolloQueryMock = jest.spyOn(Apollo.prototype, 'query');
+    it('renders to the UI', (done) => {
+      const mockGraphqlReturnValue = { data: { searchMovies: getMockMovies() } } as ApolloQueryResult<{ searchMovies: Movie[] }>;
+      const apolloQueryMock = jest.spyOn(TestBed.inject(Apollo), 'query');
       apolloQueryMock.mockReturnValue(of(mockGraphqlReturnValue))
 
       const input = fixture.debugElement.query(By.css('#movie-name-input')).nativeElement;
@@ -89,14 +95,46 @@ describe('HomeComponent', () => {
       fixture.detectChanges();
   
       setTimeout(() => {
-        fixture.detectChanges();
-        const moviesContainer = fixture.debugElement.query(By.css('#movies-container')).nativeElement;
+        try {
+          fixture.detectChanges();
+          const moviesContainer = fixture.debugElement.query(By.css('#movies-container')).nativeElement;
+  
+          expect(apolloQueryMock).toHaveBeenCalled();
+          expect(moviesContainer).toBeTruthy();
+          expect(moviesContainer.querySelectorAll('app-movie-list').length).toBe(1);
+          done();
+        }
+        catch (err) {
+          done(err);
+        }
+      }, 1000);
+    });
+  });
 
-        expect(apolloQueryMock).toHaveBeenCalled();
-        expect(moviesContainer).toBeTruthy();
-        expect(moviesContainer.querySelectorAll('div').length).toBe(1);
-        expect(moviesContainer.querySelectorAll('div').innerText).toBe('Mock movie name');
-      }, 0);
+  describe('when clicks on input\'s clear icon', () => {
+    it('clears keyword formcontrol', () => {
+      const input = fixture.debugElement.query(By.css('#movie-name-input')).nativeElement;
+      input.value = 'A movie name';
+      input.dispatchEvent(new Event('change'));
+      fixture.detectChanges();
+
+      const clearButton = fixture.debugElement.query(By.css('button[aria-label="Clear"]')).nativeElement;
+      clearButton.click();
+
+      expect(component.keyword.value).toBe(null);
+    });
+  });
+
+  describe('when call openDetailsPopup', () => {
+    it('opens the detail popup', () => {
+      const spiedDialogOpen = jest.spyOn(TestBed.inject(MatDialog), 'open')
+        .mockImplementation(() => ({} as MatDialogRef<unknown, unknown>));
+      component.openDetailsPopup({ movieId: 123 });
+      expect(spiedDialogOpen).toHaveBeenCalledWith(MovieDetailDialogComponent, {
+        data: { movieId: 123 },
+        enterAnimationDuration: '300ms',
+        exitAnimationDuration: '300ms',
+      });
     });
   });
 });

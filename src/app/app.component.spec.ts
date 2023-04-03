@@ -11,6 +11,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './components/home/home.component';
 import { GraphQLModule } from './graphql.module';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -31,6 +32,7 @@ describe('AppComponent', () => {
         MatIconModule,
         MatCardModule,
         MatSnackBarModule,
+        MatDialogModule,
     ],
     }).compileComponents();
   });

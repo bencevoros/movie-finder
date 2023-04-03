@@ -1,0 +1,7 @@
+<h2>Found movies</h2>
+
+<mat-list role="list">
+  <mat-list-item role="listitem" *ngFor="let movie of movies" (click)="openDetails(movie.id)">
+    {{ movie.name }}
+  </mat-list-item>
+</mat-list>

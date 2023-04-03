@@ -1,3 +1,7 @@
+interface SocialMedia {
+  imdb: string | null;
+}
+
 export interface Movie {
   id: number;
   name: string;
@@ -17,7 +21,7 @@ export interface Movie {
   // crew(limit?: number): [Credit!]!
   // productionCompanies: [Company!]!
   // homepage?: URL;
-  // socialMedia: SocialMedia
+  socialMedia: SocialMedia;
   // poster: Poster
   // backdrop: Backdrop
   // images: [MediaImage!]!

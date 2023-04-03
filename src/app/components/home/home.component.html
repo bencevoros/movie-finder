@@ -20,9 +20,9 @@
     </mat-card-content>
   </mat-card>
 
-  <div id="movies-container" *ngIf="(movies$ | async) as movies">
-    <div *ngFor="let movie of movies">
-      {{ movie.name }}
-    </div>
+  <hr class="home-divider">
+
+  <div id="movies-container" class="movies-container" *ngIf="(movies$ | async) as movies">
+    <app-movie-list [movies]="movies" (openMovieDetails)="openDetailsPopup($event)"></app-movie-list>
   </div>
 </div>

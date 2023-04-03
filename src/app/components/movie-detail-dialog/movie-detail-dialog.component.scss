@@ -1,0 +1,16 @@
+.movie-detail-dialog-container {
+  padding: 20px;
+}
+
+.movie-card-content-title {
+  display: flex;
+  align-items: center;
+}
+
+.movie-card-content-item {
+  padding: 10px 0;
+
+  & > button {
+    margin-top: 10px;
+  }
+}
