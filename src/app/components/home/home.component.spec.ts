@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { By } from '@angular/platform-browser';
 import { Apollo } from 'apollo-angular';
 import { HttpClientModule } from '@angular/common/http';
@@ -22,6 +22,7 @@ import { getMockMovieWithSimilar, getMockMovies } from '../../test-utils/mock-mo
 import { MovieDetailDialogComponent } from '../movie-detail-dialog/movie-detail-dialog.component';
 import { MovieListComponent } from '../movie-list/movie-list.component';
 import { SearchCardComponent } from '../search-card/search-card.component';
+import { getErrorResponse } from '../../test-utils/mock-response';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -36,7 +37,7 @@ describe('HomeComponent', () => {
       ],
       imports: [
         BrowserModule,
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
@@ -66,18 +67,23 @@ describe('HomeComponent', () => {
   });
 
   describe('when fetch movies', () => {
-    it('shows spinner', () => {
-      const mockGraphqlReturnValue = { data: { searchMovies: getMockMovies() } } as ApolloQueryResult<{ searchMovies: Movie[] }>;
-      const apolloQueryMock = jest.spyOn(TestBed.inject(Apollo), 'query');
-      apolloQueryMock.mockReturnValue(of(mockGraphqlReturnValue).pipe(delay(1000)))
-
-      const input = fixture.debugElement.query(By.css('#movie-name-input')).nativeElement;
+    const submitMovieFetching = () => {
+      const inputDebugEl = fixture.debugElement.query(By.css('#movie-name-input'));
+      const input = inputDebugEl.nativeElement;
       input.value = 'A movie name';
-      input.dispatchEvent(new Event('change'));
+      inputDebugEl.triggerEventHandler('input', { target: input });
       fixture.detectChanges();
       
       const form = fixture.debugElement.query(By.css('#movie-search-form')).nativeElement;
       form.submit();
+    };
+
+    it('shows spinner', () => {
+      const mockGraphqlReturnValue = { data: { searchMovies: getMockMovies() } } as ApolloQueryResult<{ searchMovies: Movie[] }>;
+      const apolloQueryMock = jest.spyOn(TestBed.inject(Apollo), 'query');
+      apolloQueryMock.mockReturnValue(of(mockGraphqlReturnValue).pipe(delay(1000)));
+
+      submitMovieFetching();
       fixture.detectChanges();
       const button = fixture.debugElement.query(By.css('#movie-name-search-button')).nativeElement;
       
@@ -90,13 +96,7 @@ describe('HomeComponent', () => {
       const apolloQueryMock = jest.spyOn(TestBed.inject(Apollo), 'query');
       apolloQueryMock.mockReturnValue(of(mockGraphqlReturnValue))
 
-      const input = fixture.debugElement.query(By.css('#movie-name-input')).nativeElement;
-      input.value = 'A movie name';
-      input.dispatchEvent(new Event('change'));
-      fixture.detectChanges();
-      
-      const form = fixture.debugElement.query(By.css('#movie-search-form')).nativeElement;
-      form.submit();
+      submitMovieFetching();
       fixture.detectChanges();
   
       setTimeout(() => {
@@ -113,6 +113,28 @@ describe('HomeComponent', () => {
           done(err);
         }
       }, 1000);
+    });
+
+    describe('when movie fetching has error', () => {
+      it('shows snackbar', (done) => {
+        const apolloQueryMock = jest.spyOn(TestBed.inject(Apollo), 'query');
+        apolloQueryMock.mockReturnValue(getErrorResponse());
+
+        const snackOpenMock = jest.spyOn(TestBed.inject(MatSnackBar), 'open');
+        jest.spyOn(console, 'error').mockImplementation(() => {});
+  
+        submitMovieFetching();
+        fixture.detectChanges();
+
+        setTimeout(() => {
+          try {
+            expect(snackOpenMock).toHaveBeenCalled();
+            done();
+          } catch (err) {
+            done(err);
+          }
+        }, 0);
+      });
     });
   });
 
@@ -173,6 +195,28 @@ describe('HomeComponent', () => {
           done(err);
         }
       }, 1000);
+    });
+
+    describe('when similar movies fetching has error', () => {
+      it('shows snackbar', (done) => {
+        const apolloQueryMock = jest.spyOn(TestBed.inject(Apollo), 'query');
+        apolloQueryMock.mockReturnValue(getErrorResponse());
+
+        const snackOpenMock = jest.spyOn(TestBed.inject(MatSnackBar), 'open');
+        jest.spyOn(console, 'error').mockImplementation(() => {});
+  
+        component.getSimilarMovies(1);
+        fixture.detectChanges();
+
+        setTimeout(() => {
+          try {
+            expect(snackOpenMock).toHaveBeenCalled();
+            done();
+          } catch (err) {
+            done(err);
+          }
+        }, 0);
+      });
     });
   });
 });
