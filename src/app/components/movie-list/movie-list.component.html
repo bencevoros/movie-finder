@@ -6,7 +6,18 @@
 </div>
 
 <mat-list role="list">
-  <mat-list-item role="listitem" *ngFor="let movie of movies" (click)="openDetails(movie.id)">
-    {{ movie.name }}
+  <mat-list-item
+    role="listitem"
+    *ngFor="let movie of movies"
+    (click)="openDetails(movie.id)"
+    class="movie-list-item"
+  >
+    <div>
+      <span matListItemTitle>{{ movie.name }}</span>
+      <span matListItemLine>{{ movie.score }}</span>
+      <mat-chip-listbox aria-label="Movie genres" matListItemLine>
+        <mat-chip *ngFor="let genre of movie.genres">{{ genre.name }}</mat-chip>
+      </mat-chip-listbox>
+    </div>
   </mat-list-item>
 </mat-list>

@@ -14,6 +14,7 @@ export const getMockMovie = (id: number = 1): Movie => ({
   socialMedia: {
     imdb: 'IMDB_URL',
   },
+  genres: [],
   similar: []
 });
 

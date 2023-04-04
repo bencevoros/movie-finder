@@ -16,5 +16,6 @@ export interface Movie {
   popularity: number;
   score: number;
   votes: number;
+  genres: { name: string }[];
   similar?: Movie[];
 }

@@ -10,6 +10,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { GraphQLModule } from './graphql.module';
 import { AppComponent } from './app.component';
@@ -40,6 +42,8 @@ import { SearchCardComponent } from './components/search-card/search-card.compon
     MatSnackBarModule,
     MatListModule,
     MatDialogModule,
+    MatChipsModule,
+    MatTooltipModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

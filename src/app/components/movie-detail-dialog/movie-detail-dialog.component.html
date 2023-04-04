@@ -19,10 +19,12 @@
             color="primary"
             (click)="goToImdbPage()"
             [disabled]="!movie.socialMedia.imdb"
-            [title]="movie.socialMedia.imdb ? '' : 'IMDB page not found'"
-          >
+            >
             Check on IMDB
           </button>
+          <div *ngIf="!movie.socialMedia.imdb" class="imdb-page-not-found-info">
+            IMDB page not found
+          </div>
         </div>
         <hr>
         <div class="movie-card-content-item">

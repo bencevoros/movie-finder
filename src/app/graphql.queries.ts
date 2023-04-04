@@ -16,6 +16,9 @@ export const SEARCH_MOVIES = gql<{ searchMovies: Movie[] }, { query: string }>`
       popularity
       score
       votes
+      genres {
+        name
+      }
       socialMedia {
         imdb
       }
@@ -38,6 +41,9 @@ export const GET_MOVIE = gql<{ movie: Movie }, { id: number }>`
       popularity
       score
       votes
+      genres {
+        name
+      }
       socialMedia {
         imdb
       }
@@ -61,6 +67,9 @@ export const GET_SIMILAR_MOVIES = gql<{ movie: { similar: Movie[] } }, { id: num
         popularity
         score
         votes
+        genres {
+          name
+        }
         socialMedia {
           imdb
         }
