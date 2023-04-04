@@ -9,7 +9,7 @@ import { SearchType } from '../../enums/search-type';
 })
 export class SearchCardComponent {
   form = new FormGroup({
-    keyword: new FormControl('fight club', Validators.required),
+    keyword: new FormControl('', Validators.required),
   });
   SearchType = SearchType;
 
